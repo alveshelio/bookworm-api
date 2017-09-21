@@ -27,3 +27,35 @@ export function sendConfirmationEmail(user) {
 
   transport.sendMail(email);
 }
+
+export function sendResetPasswordEmail(user) {
+  const transport = setup();
+  const email = {
+    from,
+    to: user.email,
+    subject: 'Reset Password',
+    text: `
+     To reset password follow this link
+      ${user.generateResetPasswordLink()}
+    `
+  };
+
+  transport.sendMail(email);
+}
+
+export function sendResetPasswordNotificationEmail(user) {
+  const transport = setup();
+  const email = {
+    from,
+    to: user.email,
+    subject: 'Your password has been reset',
+    text: `
+     This email is to let you know that your password has been reset.
+     If it was you who reset the password you can simply ignore this image.
+     If not please head to ${process.env.HOST}/forgot_password 
+     to reset your password.
+    `
+  };
+
+  transport.sendMail(email);
+}
