@@ -10,10 +10,13 @@ router.post('/', (req, res) => {
   const { credentials } = req.body;
   User.findOne({ email: credentials.email })
     .then(user => {
+      console.log('user', user);
       if (user && user.isValidPassword(credentials.password)) {
+        console.log('valid password');
         res.status(200).json({ user: user.toAuthJSON() });
       } else {
-        res.json({ errors: { global: 'Invalid credentials!!!' } });
+        console.log('invalid password');
+        res.json({ user: null, errors: { global: 'Invalid credentials!!!' } });
       }
     });
 });
@@ -46,14 +49,6 @@ router.post('/confirmation', (req, res) => {
   } catch(err) {
     res.status(400).json({ message: 'It seems your token is invalid' });
   }
-
-  // User.findOneAndUpdate(
-  //   { confirmationToken: token},
-  //   { confirmationToken: '', confirmed: true },
-  //   { new: true }
-  // ).then(user =>
-  //   user ? res.json({ user: user.toAuthJSON() }) : res.status(400).json({})
-  // ).catch(err => res.json({ user: null, errors: { global: err } }));
 });
 
 router.post('/reset_password_request', (req, res) => {
